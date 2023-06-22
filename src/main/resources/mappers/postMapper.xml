@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.post.dao.PostDao">
+	<insert id="insert" parameterType="Post">
+		insert into post values(#{num}, #{category}, #{tit}, #{content}, #{address}, #{price}, #{img}, sysdate, 0)
+	</insert>
+
+	<select id="maxNum" resultType="int">
+		select nvl(max(num), 0) from post
+	</select>
+	
+	<select id="getDataCount" parameterType="map" resultType="Post">
+		select nvl(count(*), 0) from post where ${searchKey} like '% || #{searchValue} || '%'
+	</select>
+	
+	<select id="getReadData" parameterType="int" resultType="Post">
+		select * from post where num = #{num}
+	</select>
+	
+	<select id="getLists" parameterType="map" resultType="Post">
+		select * from (
+		select rownum rnum, data.* from (
+    	select num, tit, summary, views, to_Char(reg_date, 'YYYY-MM-DD') reg_date
+    	from post 
+    	where ${searchKey} like '%' || #{searchValue} || '%' 
+    	order by num desc) data)
+    	<![CDATA[
+		where rnum >= #{start} and rnum <= #{end}
+		]]>
+	</select>
+	
+	<select id="getTop3Data" parameterType="map" resultType="Post">
+	select * from (select * from post order by views desc)
+	<![CDATA[
+	where rownum <= 3
+	]]>
+	</select>
+
+	<update id="updateViews" parameterType="int">
+		update post set views = views + 1 where num = #{num}
+	</update>
+
+	<update id="updateData" parameterType="Post">
+		update post set category = #{category}, tit = #{tit}, content = #{content}, address = #{address}, price = #{price}, img = #{img} where num = #{num}
+	</update>
+
+	<delete id="deleteData" parameterType="int">
+		delete post where num = #{num}
+	</delete>
+
+</mapper>
