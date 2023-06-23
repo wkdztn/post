@@ -9,22 +9,25 @@
 
 <div layout:fragment="content" id="bbs">
 	<div class="container text-center">
-		<h2 style="font-size: 24px; font-weight: bold; margin-bottom: 30px">인기글</h2>
+		<h2 class="home-tit">TOP POST</h2>
 		<ul class="row" id="top3">
-			<li class="col" th:each="post:${top3}"><a href="">
+			<li class="col" th:each="post:${top3}"><a
+				th:href="@{/article(num=${post.num})}">
 					<div class="thum">
-						<img alt="" src="" width="320" height="320">
+						<img th:alt="${post.img}" th:src="${post.img}" width="320"
+							height="320">
 					</div>
 					<div class="main-content">
 						<p class="category" th:text="${post.category}"></p>
 						<h3 class="tit" th:text="${post.tit}"></h3>
-						<p class="reg_date" th:text="${post.reg_date}"></p>
+						<p>조회수 <span class="views" th:text="${post.views}"></span>
+						</p>
 					</div>
 			</a></li>
 		</ul>
 	</div>
 </div>
-</div>
 <th:block layout:fragment="script">
 </th:block>
+
 </html>

@@ -58,6 +58,4 @@ public class PostServiceImpl implements PostService {
 		return postMapper.getTop3Data();
 	}
 
-
-
 }

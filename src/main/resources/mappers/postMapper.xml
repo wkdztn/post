@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.post.dao.PostDao">
-	<insert id="insert" parameterType="Post">
+	<insert id="insertData" parameterType="Post">
 		insert into post values(#{num}, #{category}, #{tit}, #{content}, #{address}, #{price}, #{img}, sysdate, 0)
 	</insert>
 
@@ -12,8 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select nvl(max(num), 0) from post
 	</select>
 	
-	<select id="getDataCount" parameterType="map" resultType="Post">
-		select nvl(count(*), 0) from post where ${searchKey} like '% || #{searchValue} || '%'
+	<select id="getDataCount" parameterType="map" resultType="int">
+		select nvl(count(*), 0) from post where ${searchKey} like '%' || #{searchValue} || '%'
 	</select>
 	
 	<select id="getReadData" parameterType="int" resultType="Post">
@@ -23,10 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getLists" parameterType="map" resultType="Post">
 		select * from (
 		select rownum rnum, data.* from (
-    	select num, tit, summary, views, to_Char(reg_date, 'YYYY-MM-DD') reg_date
+    	select num, category, tit, content, address, price, img, to_Char(reg_date, 'YYYY-MM-DD') reg_date, views
     	from post 
-    	where ${searchKey} like '%' || #{searchValue} || '%' 
-    	order by num desc) data)
+    	where ${searchKey} like '%' || #{searchValue} || '%'
+    	order by num desc) 
+    	data)
     	<![CDATA[
 		where rnum >= #{start} and rnum <= #{end}
 		]]>

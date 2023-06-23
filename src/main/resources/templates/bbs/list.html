@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
 
-</body>
+<th:block layout:fragment="css">
+	<link rel="stylesheet" type="text/css" href="css/list.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</th:block>
+
+<div layout:fragment="content" id="bbs">
+	<div class="container text-center">
+		<ul class="row" id="lists">
+			<li class="col" th:if="${#lists.size(lists)} > 0"
+				th:each="post:${lists}"><a
+				th:href="|@{${articleUrl}}&num=@{${post.num}}|">
+					<div class="thum">
+						<img th:alt="${post.img}" th:src="${post.img}" width="320" height="320">
+					</div>
+					<div class="main-content">
+						<p class="category" th:text="${post.category}"></p>
+						<h3 class="tit" th:text="${post.tit}"></h3>
+						<p class="reg_date" th:text="${post.reg_date}"></p>
+					</div>
+			</a></li>
+		</ul>
+	</div>
+</div>
+
 </html>
